@@ -9,6 +9,7 @@ import (
 	"errors"
 	"io"
 	"net"
+	"runtime"
 	"strings"
 	"sync"
 	"time"
@@ -458,8 +459,25 @@ func (srv *Server) serveUDP(l *net.UDPConn) error {
 
 	rtimeout := srv.getReadTimeout()
 	// deadline is not used here
+	last := time.Now()
+	pkts := uint64(0)
+	max := 1500
 	for srv.isStarted() {
 		m, s, err := reader.ReadUDP(l, rtimeout)
+		pkts++
+		if pkts%100 == 0 {
+			rate := 100.0 / time.Since(last).Seconds()
+			left := float64(max-runtime.NumGoroutine()) / rate
+			switch {
+			case left < 0.0:
+				time.Sleep(10 * time.Microsecond)
+			case left >= 0.0 && left < 1.0:
+				time.Sleep(5 * time.Microsecond)
+			case left >= 1.0 && left < 2.0:
+				time.Sleep(2 * time.Microsecond)
+			}
+		}
+
 		if err != nil {
 			if !srv.isStarted() {
 				return nil
@@ -477,6 +495,7 @@ func (srv *Server) serveUDP(l *net.UDPConn) error {
 		}
 		wg.Add(1)
 		go srv.serveUDPPacket(&wg, m, l, s)
+		last = time.Now()
 	}
 
 	return nil

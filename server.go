@@ -461,20 +461,21 @@ func (srv *Server) serveUDP(l *net.UDPConn) error {
 	// deadline is not used here
 	last := time.Now()
 	pkts := uint64(0)
-	max := 1500
+	max := 1500 // 1500 is a random number
 	for srv.isStarted() {
 		m, s, err := reader.ReadUDP(l, rtimeout)
 		pkts++
-		if pkts%100 == 0 {
+		numgo := runtime.NumGoroutine()
+		if pkts%100 == 0 { // && numgo > max/2 {
 			rate := 100.0 / time.Since(last).Seconds()
-			left := float64(max-runtime.NumGoroutine()) / rate
+			left := float64(max-numgo) / rate
 			switch {
 			case left < 0.0:
-				time.Sleep(10 * time.Microsecond)
-			case left >= 0.0 && left < 1.0:
-				time.Sleep(5 * time.Microsecond)
-			case left >= 1.0 && left < 2.0:
-				time.Sleep(2 * time.Microsecond)
+				// 50 is a random number.
+				time.Sleep(50 * time.Microsecond)
+			default:
+				sleep := time.Since(last).Nanoseconds() / 100
+				time.Sleep(time.Duration(sleep))
 			}
 		}
 

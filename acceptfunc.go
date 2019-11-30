@@ -1,5 +1,7 @@
 package dns
 
+import "time"
+
 // MsgAcceptFunc is used early in the server code to accept or reject a message with RcodeFormatError.
 // It returns a MsgAcceptAction to indicate what should happen with the message.
 type MsgAcceptFunc func(dh Header) MsgAcceptAction
@@ -51,4 +53,21 @@ func defaultMsgAcceptFunc(dh Header) MsgAcceptAction {
 		return MsgReject
 	}
 	return MsgAccept
+}
+
+// PacketAction represents the action to be taken.
+type PacketAction int
+
+const (
+	PacketAccept PacketAction = iota // Accept the packet
+	PacketReject                     // Reject the packet
+)
+
+// PacketFunc returns a PacketAction that indicates what should happen with this packet.
+// This function (if defined) in the server is called after the initial accept on the socket.
+type PacketFunc func(numgo int, last time.Time, opts PacketAcceptOptions) PacketAction
+
+type PacketAcceptOptions struct {
+	Max     int // Maximum number of goroutines to allow.
+	Packets int // We are called when ever we've seen this many packets
 }

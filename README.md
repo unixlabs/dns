@@ -1,6 +1,6 @@
 # DNS.org.pk
 
-# Punlic DNS Google alternative better and secure DNS
+### Public DNS Google alternative better and secure DNS
 
 # 81.7.7.12
 # 81.7.5.12

@@ -1,174 +1,62 @@
-[![Build Status](https://travis-ci.org/miekg/dns.svg?branch=master)](https://travis-ci.org/miekg/dns)
-[![Code Coverage](https://img.shields.io/codecov/c/github/miekg/dns/master.svg)](https://codecov.io/github/miekg/dns?branch=master)
-[![Go Report Card](https://goreportcard.com/badge/github.com/miekg/dns)](https://goreportcard.com/report/miekg/dns)
-[![](https://godoc.org/github.com/miekg/dns?status.svg)](https://godoc.org/github.com/miekg/dns)
+# DNS.org.pk
 
-# Alternative (more granular) approach to a DNS library
+# Punlic DNS Google alternative better and secure DNS
 
-> Less is more.
+# 81.7.7.12
+# 81.7.5.12
 
-Complete and usable DNS library. All Resource Records are supported, including the DNSSEC types.
-It follows a lean and mean philosophy. If there is stuff you should know as a DNS programmer there
-isn't a convenience function for it. Server side and client side programming is supported, i.e. you
-can build servers and resolvers with it.
+[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
-We try to keep the "master" branch as sane as possible and at the bleeding edge of standards,
-avoiding breaking changes wherever reasonable. We support the last two versions of Go.
+###### open source Domain Name System (DNS) DNS.org.pk
 
-# Goals
+#### The Domain Name System DNS.org.pk is the phonebook of the Pakistan Internet. Pakistani access information online through dns.org.pk 100% private and secure TLS / SSL encrypted dns. 
 
-* KISS;
-* Fast;
-* Small API. If it's easy to code in Go, don't make a function for it.
 
-# Users
+### DNS over TLS on the Server
 
-A not-so-up-to-date-list-that-may-be-actually-current:
+DNS.org.pk uses the rust-native-tls library, it should work with certificate signed by any standard CA.
 
-* https://github.com/coredns/coredns
-* https://cloudflare.com
-* https://github.com/abh/geodns
-* http://www.statdns.com/
-* http://www.dnsinspect.com/
-* https://github.com/chuangbo/jianbing-dictionary-dns
-* http://www.dns-lg.com/
-* https://github.com/fcambus/rrda
-* https://github.com/kenshinx/godns
-* https://github.com/skynetservices/skydns
-* https://github.com/hashicorp/consul
-* https://github.com/DevelopersPL/godnsagent
-* https://github.com/duedil-ltd/discodns
-* https://github.com/StalkR/dns-reverse-proxy
-* https://github.com/tianon/rawdns
-* https://mesosphere.github.io/mesos-dns/
-* https://pulse.turbobytes.com/
-* https://github.com/fcambus/statzone
-* https://github.com/benschw/dns-clb-go
-* https://github.com/corny/dnscheck for <http://public-dns.info/>
-* https://namesmith.io
-* https://github.com/miekg/unbound
-* https://github.com/miekg/exdns
-* https://dnslookup.org
-* https://github.com/looterz/grimd
-* https://github.com/phamhongviet/serf-dns
-* https://github.com/mehrdadrad/mylg
-* https://github.com/bamarni/dockness
-* https://github.com/fffaraz/microdns
-* http://kelda.io
-* https://github.com/ipdcode/hades <https://jd.com>
-* https://github.com/StackExchange/dnscontrol/
-* https://www.dnsperf.com/
-* https://dnssectest.net/
-* https://dns.apebits.com
-* https://github.com/oif/apex
-* https://github.com/jedisct1/dnscrypt-proxy
-* https://github.com/jedisct1/rpdns
-* https://github.com/xor-gate/sshfp
-* https://github.com/rs/dnstrace
-* https://blitiri.com.ar/p/dnss ([github mirror](https://github.com/albertito/dnss))
-* https://github.com/semihalev/sdns
-* https://render.com
-* https://github.com/peterzen/goresolver
-* https://github.com/folbricht/routedns
+## DNSSec status
 
-Send pull request if you want to be listed here.
+Currently the root key is hardcoded into the system. This gives validation of
+ DNSKEY and DS records back to the root. NSEC is implemented, but not NSEC3.
+ Because caching is not yet enabled, it has been noticed that some DNS servers
+ appear to rate limit the connections, validating RRSIG records back to the root
+ can require a significant number of additional queries for those records.
 
-# Features
+Zones will be automatically resigned on any record updates via dynamic DNS.
 
-* UDP/TCP queries, IPv4 and IPv6
-* RFC 1035 zone file parsing ($INCLUDE, $ORIGIN, $TTL and $GENERATE (for all record types) are supported
-* Fast
-* Server side programming (mimicking the net/http package)
-* Client side programming
-* DNSSEC: signing, validating and key generation for DSA, RSA, ECDSA and Ed25519
-* EDNS0, NSID, Cookies
-* AXFR/IXFR
-* TSIG, SIG(0)
-* DNS over TLS (DoT): encrypted connection between client and server over TCP
-* DNS name compression
+## RFCs implemented
 
-Have fun!
+### Basic operations
+- [RFC 1035](https://tools.ietf.org/html/rfc1035): Base DNS spec (see the Resolver for caching)
+- [RFC 2308](https://tools.ietf.org/html/rfc2308): Negative Caching of DNS Queries (see the Resolver)
+- [RFC 2782](https://tools.ietf.org/html/rfc2782): Service location
+- [RFC 3596](https://tools.ietf.org/html/rfc3596): IPv6
+- [RFC 6891](https://tools.ietf.org/html/rfc6891): Extension Mechanisms for DNS
+- [RFC 6761](https://tools.ietf.org/html/rfc6761): Special-Use Domain Names (resolver)
+- [RFC 6762](https://tools.ietf.org/html/rfc6762): mDNS Multicast DNS (experimental feature: `mdns`)
+- [RFC 6763](https://tools.ietf.org/html/rfc6763): DNS-SD Service Discovery (experimental feature: `mdns`)
+- [RFC ANAME](https://tools.ietf.org/html/draft-ietf-dnsop-aname-02): Address-specific DNS aliases (`ANAME`)
 
-Miek Gieben  -  2010-2012  -  <miek@miek.nl>
-DNS Authors 2012-
+### Update operations
+- [RFC 2136](https://tools.ietf.org/html/rfc2136): Dynamic Update
 
-# Building
+### Secure DNS operations
+- [RFC 3007](https://tools.ietf.org/html/rfc3007): Secure Dynamic Update
+- [RFC 4034](https://tools.ietf.org/html/rfc4034): DNSSEC Resource Records
+- [RFC 4035](https://tools.ietf.org/html/rfc4035): Protocol Modifications for DNSSEC
+- [RFC 4509](https://tools.ietf.org/html/rfc4509): SHA-256 in DNSSEC Delegation Signer
+- [RFC 5702](https://tools.ietf.org/html/rfc5702): SHA-2 Algorithms with RSA in DNSKEY and RRSIG for DNSSEC
+- [RFC 6844](https://tools.ietf.org/html/rfc6844): DNS Certification Authority Authorization (CAA) Resource Record
+- [RFC 6698](https://tools.ietf.org/html/rfc6698): The DNS-Based Authentication of Named Entities (DANE) Transport Layer Security (TLS) Protocol: TLSA
+- [RFC 6840](https://tools.ietf.org/html/rfc6840): Clarifications and Implementation Notes for DNSSEC
+- [RFC 6844](https://tools.ietf.org/html/rfc6844): DNS Certification Authority Authorization Resource Record
+- [RFC 6944](https://tools.ietf.org/html/rfc6944): DNSKEY Algorithm Implementation Status
+- [RFC 6975](https://tools.ietf.org/html/rfc6975): Signaling Cryptographic Algorithm Understanding
+- [RFC 7858](https://tools.ietf.org/html/rfc7858): DNS over TLS (feature: `dns-over-rustls`, `dns-over-native-tls`, or `dns-over-openssl`)
+- [RFC DoH](https://tools.ietf.org/html/draft-ietf-doh-dns-over-https-14): DNS over HTTPS, DoH (feature: `dns-over-https-rustls`)
 
-Building is done with the `go` tool. If you have setup your GOPATH correctly, the following should
-work:
+###### adil@linux.com for help or quesiton.
 
-    go get github.com/miekg/dns
-    go build github.com/miekg/dns
 
-## Examples
-
-A short "how to use the API" is at the beginning of doc.go (this also will show when you call `godoc
-github.com/miekg/dns`).
-
-Example programs can be found in the `github.com/miekg/exdns` repository.
-
-## Supported RFCs
-
-*all of them*
-
-* 103{4,5} - DNS standard
-* 1348 - NSAP record (removed the record)
-* 1982 - Serial Arithmetic
-* 1876 - LOC record
-* 1995 - IXFR
-* 1996 - DNS notify
-* 2136 - DNS Update (dynamic updates)
-* 2181 - RRset definition - there is no RRset type though, just []RR
-* 2537 - RSAMD5 DNS keys
-* 2065 - DNSSEC (updated in later RFCs)
-* 2671 - EDNS record
-* 2782 - SRV record
-* 2845 - TSIG record
-* 2915 - NAPTR record
-* 2929 - DNS IANA Considerations
-* 3110 - RSASHA1 DNS keys
-* 3225 - DO bit (DNSSEC OK)
-* 340{1,2,3} - NAPTR record
-* 3445 - Limiting the scope of (DNS)KEY
-* 3597 - Unknown RRs
-* 403{3,4,5} - DNSSEC + validation functions
-* 4255 - SSHFP record
-* 4343 - Case insensitivity
-* 4408 - SPF record
-* 4509 - SHA256 Hash in DS
-* 4592 - Wildcards in the DNS
-* 4635 - HMAC SHA TSIG
-* 4701 - DHCID
-* 4892 - id.server
-* 5001 - NSID
-* 5155 - NSEC3 record
-* 5205 - HIP record
-* 5702 - SHA2 in the DNS
-* 5936 - AXFR
-* 5966 - TCP implementation recommendations
-* 6605 - ECDSA
-* 6725 - IANA Registry Update
-* 6742 - ILNP DNS
-* 6840 - Clarifications and Implementation Notes for DNS Security
-* 6844 - CAA record
-* 6891 - EDNS0 update
-* 6895 - DNS IANA considerations
-* 6944 - DNSSEC DNSKEY Algorithm Status
-* 6975 - Algorithm Understanding in DNSSEC
-* 7043 - EUI48/EUI64 records
-* 7314 - DNS (EDNS) EXPIRE Option
-* 7477 - CSYNC RR
-* 7828 - edns-tcp-keepalive EDNS0 Option
-* 7553 - URI record
-* 7858 - DNS over TLS: Initiation and Performance Considerations
-* 7871 - EDNS0 Client Subnet
-* 7873 - Domain Name System (DNS) Cookies
-* 8080 - EdDSA for DNSSEC
-* 8499 - DNS Terminology
-
-## Loosely Based Upon
-
-* ldns - <https://nlnetlabs.nl/projects/ldns/about/>
-* NSD - <https://nlnetlabs.nl/projects/nsd/about/>
-* Net::DNS - <http://www.net-dns.org/>
-* GRONG - <https://github.com/bortzmeyer/grong>

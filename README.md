@@ -1,9 +1,13 @@
 # DNS.org.pk
 
+# dot. DNS over https to use in web browser
+### https://dot.dns.org.pk/dns-query
+
 ### Public DNS Google alternative better and secure DNS
 
 # 81.7.7.12
 # 81.7.5.12
+
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
